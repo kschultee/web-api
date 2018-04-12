@@ -11,11 +11,28 @@ app.get('/', (req, res) => {
 })
 
 app.post('/notes', (req, res) => {
-  MongoClient.connect('mongodb://localhost/', (err, client) => {
+  MongoClient.connect('mongodb://localhost/notes', (err, client) => {
     if (err) throw err
     const db = client.db('library')
     const notes = db.collection('notes')
-    notes.insertOne(req.body)
+    notes.insertOne(req.body, (err, res) => {
+      if (err) throw err
+      console.log(res)
+    })
+  })
+})
+
+app.get('/notes', (req, res) => {
+  MongoClient.connect('mongodb://localhost/notes', (err, client) => {
+    if (err) throw err
+    const db = client.db('library')
+    const notes = db.collection('notes')
+    notes
+      .find()
+      .toArray(function (err, results) {
+        if (err) throw err
+        res.json(results)
+      })
   })
 })
 
