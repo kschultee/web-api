@@ -16,6 +16,12 @@ app.post('/notes', (req, res) => {
     const db = client.db('library')
     const notes = db.collection('notes')
     notes.insertOne(req.body)
+    notes
+      .find()
+      .toArray(function (err, results) {
+        if (err) throw err
+        console.log(results)
+      })
   })
 })
 
