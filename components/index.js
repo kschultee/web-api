@@ -36,6 +36,21 @@ app.get('/notes', (req, res) => {
   })
 })
 
+app.put('/notes', bParser.json(), (req, res) => {
+  MongoClient.connect('mongodb://localhost/notes', (err, client) => {
+    let id = req.body.id
+    let update = req.body.note
+    if (err) throw err
+    const db = client.db('library')
+    const notes = db.collection('notes')
+    notes
+      .findOneAndUpdate({id}, {$set: {'note': update}}, (err, results) => {
+        if (err) throw err
+        res.json(results)
+      })
+  })
+})
+
 app.listen(3000, () => {
   'Listening on port 3000'
 })
