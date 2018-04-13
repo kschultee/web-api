@@ -51,6 +51,18 @@ app.put('/notes', bParser.json(), (req, res) => {
   })
 })
 
+app.delete('/notes', bParser.json(), (req, res) => {
+  MongoClient.connect('mongodb://localhost/notes', (err, client) => {
+    if (err) throw err
+    let id = req.body.id
+    const db = client.db('library')
+    const notes = db.collection('notes')
+    notes
+      .remove({id}, true)
+    console.log(res)
+  })
+})
+
 app.listen(3000, () => {
   'Listening on port 3000'
 })
